@@ -12,11 +12,15 @@ class AuthController extends Controller
     //
     public function register(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required',
             'c_password' => 'required|same:password',
+            'telefone' => 'required|regex:/^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/
+',
+            'crm' => 'required|unique:users|regex:/^\d{6}$/'
         ]);
 
         if($validator->fails()){
