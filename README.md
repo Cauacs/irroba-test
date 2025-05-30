@@ -5,13 +5,6 @@ Este é um projeto backend para um sistema de agendamento de consultas médicas,
 
 Para instalar o projeto, siga os passos abaixo:
 
-Clone o repositório com:
-
-```bash
-git clone https://github.com/seu-usuario/seu-repositorio.git
-cd seu-repositorio
-````
-
 Instale o Laravel Sail como dependência de desenvolvimento:
 
 ```bash
