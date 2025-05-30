@@ -84,5 +84,5 @@ Após a instalação, a aplicação estará acessível em:
 ```
 http://localhost
 ```
-Também adicionei uma coleção do postman ao repositório para facilitar os testes da api.
+Também adicionei uma coleção do postman ao repositório para facilitar os testes da api. (Apenas certifique-se de colocar o Bearer token na aba de Authorization do Postman)
 
