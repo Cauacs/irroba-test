@@ -30,7 +30,7 @@ async function fetchAppointments() {
 		data.forEach(a => {
 		    const li = document.createElement('li');
 		    li.innerHTML = `
-          ${a.paciente.name} - ${a.data_hora}
+          ${a.paciente.name} - ${a.data_hora} - ${a}
           <button onclick="deleteAppointment(${a.id})">Cancelar</button>
         `;
 		    ul.appendChild(li);
@@ -45,20 +45,20 @@ async function fetchAppointments() {
 }
 
 async function deleteAppointment(id) {
-  if (!confirm("Deseja realmente cancelar este agendamento?")) return;
+    if (!confirm("Deseja realmente cancelar este agendamento?")) return;
 
-  const token = localStorage.getItem('token');
-  const res = await fetch(`${API_BASE}/agendamentos/${id}`, {
-    method: 'DELETE',
-    headers: { Authorization: `Bearer ${token}` },
-  });
+    const token = localStorage.getItem('token');
+    const res = await fetch(`${API_BASE}/agendamentos/${id}`, {
+	method: 'DELETE',
+	headers: { Authorization: `Bearer ${token}` },
+    });
 
-  if (res.ok) {
-    alert('Agendamento cancelado com sucesso!');
-    fetchAppointments();
-  } else {
-    alert('Erro ao cancelar agendamento');
-  }
+    if (res.ok) {
+	alert('Agendamento cancelado com sucesso!');
+	fetchAppointments();
+    } else {
+	alert('Erro ao cancelar agendamento');
+    }
 }
 
 // Função para buscar pacientes
@@ -90,20 +90,20 @@ async function fetchPacientes() {
 }
 
 async function deletePatient(id) {
-  if (!confirm("Deseja realmente excluir este paciente?")) return;
+    if (!confirm("Deseja realmente excluir este paciente?")) return;
 
-  const token = localStorage.getItem('token');
-  const res = await fetch(`${API_BASE}/pacientes/${id}`, {
-    method: 'DELETE',
-    headers: { Authorization: `Bearer ${token}` },
-  });
+    const token = localStorage.getItem('token');
+    const res = await fetch(`${API_BASE}/pacientes/${id}`, {
+	method: 'DELETE',
+	headers: { Authorization: `Bearer ${token}` },
+    });
 
-  if (res.ok) {
-    alert('Paciente excluído com sucesso!');
-    fetchPacientes();
-  } else {
-    alert('Erro ao excluir paciente');
-  }
+    if (res.ok) {
+	alert('Paciente excluído com sucesso!');
+	fetchPacientes();
+    } else {
+	alert('Erro ao excluir paciente');
+    }
 }
 
 // Função logout
@@ -112,65 +112,84 @@ function logout() {
     window.location.href = 'login.html';
 }
 
-// Eventos
 document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById('loginForm')) {
-	const form = document.getElementById('loginForm');
-	form.addEventListener('submit', e => {
-	    e.preventDefault();
-	    const email = form.email.value;
-	    const password = form.password.value;
-	    login(email, password);
-	});
-    }
+  if (document.getElementById('loginForm')) {
+    const form = document.getElementById('loginForm');
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const email = form.email.value;
+      const password = form.password.value;
+      login(email, password);
+    });
+  }
 
-    if (document.getElementById('logoutBtn')) {
-	document.getElementById('logoutBtn').addEventListener('click', logout);
+  if (document.getElementById('logoutBtn')) {
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+  }
 
-	// Ao carregar dashboard, buscar dados
-	fetchAppointments();
-	fetchPacientes();
-    }
+  const registerForm = document.getElementById('registerForm');
+  if (registerForm) {
+    registerForm.addEventListener('submit', e => {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const c_password = document.getElementById('c_password').value;
+      const telefone = document.getElementById('telefone').value;
+      const crm = document.getElementById('crm').value;
+
+      register(name, email, password, c_password, telefone, crm);
+    });
+  }
+
+  if (document.getElementById('appointmentsList')) {
+    fetchAppointments();
+  }
+
+  if (document.getElementById('patientsList')) {
+    fetchPacientes();
+  }
 });
 
 
 patientForm.addEventListener('submit', async e => {
-  e.preventDefault();
-  const token = localStorage.getItem('token');
+    e.preventDefault();
+    const token = localStorage.getItem('token');
 
-  const name = document.getElementById('name').value;
-  const email = document.getElementById('email').value;
-  const telefone = document.getElementById('telefone').value;
-  const data_nascimento = document.getElementById('data_nascimento').value;
-  const cpf = document.getElementById('cpf').value;
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const telefone = document.getElementById('telefone').value;
+    const data_nascimento = document.getElementById('data_nascimento').value;
+    const cpf = document.getElementById('cpf').value;
 
-  try {
-    const res = await fetch(`${API_BASE}/pacientes`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        telefone,
-        data_nascimento,
-        cpf
-      }),
-    });
+    try {
+	const res = await fetch(`${API_BASE}/pacientes`, {
+	    method: 'POST',
+	    headers: {
+		'Content-Type': 'application/json',
+		Authorization: `Bearer ${token}`,
+	    },
+	    body: JSON.stringify({
+		name,
+		email,
+		telefone,
+		data_nascimento,
+		cpf
+	    }),
+	});
 
-    if (res.ok) {
-      alert('Paciente cadastrado com sucesso!');
-      patientForm.reset();
-      fetchPacientes(); // Atualiza a lista de pacientes
-    } else {
-      const error = await res.json();
-      alert('Erro ao cadastrar: ' + (error.message || 'Verifique os dados'));
+	if (res.ok) {
+	    alert('Paciente cadastrado com sucesso!');
+	    patientForm.reset();
+	    fetchPacientes(); // Atualiza a lista de pacientes
+	} else {
+	    const error = await res.json();
+	    alert('Erro ao cadastrar: ' + (error.message || 'Verifique os dados'));
+	}
+    } catch (err) {
+	alert('Erro: ' + err.message);
     }
-  } catch (err) {
-    alert('Erro: ' + err.message);
-  }
 });
 
 function loadPacientesForSelect(data) {
@@ -217,3 +236,35 @@ appointmentForm.addEventListener('submit', async e => {
 	alert('Erro: ' + err.message);
     }
 })
+
+async function register(name, email, password, c_password, telefone, crm) {
+    try {
+	const res = await fetch(`${API_BASE}/register`, {
+	    method: 'POST',
+	    headers: { 'Content-Type': 'application/json' },
+	    body: JSON.stringify({
+		name,
+		email,
+		password,
+		c_password,
+		telefone,
+		crm
+	    })
+	});
+
+	const data = await res.json();
+
+	if (res.ok) {
+	    alert('Cadastro realizado com sucesso!');
+	    localStorage.setItem('token', data.success.token);
+	    window.location.href = 'dashboard.html'; // ou redirecione para onde quiser
+	}
+	else {
+	    console.error(data);
+	    alert('Erro: ' + Object.values(data.error).flat().join('\n'));
+	}}
+    
+    catch (err) {
+	alert('Erro ao registrar: ' + err.message);
+	
+    }}
