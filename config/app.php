@@ -123,5 +123,8 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'web' => [
+        \App\Http\Middleware\HandleInertiaRequests::class,
+    ],
 
 ];
