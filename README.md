@@ -84,3 +84,5 @@ Após a instalação, a aplicação estará acessível em:
 ```
 http://localhost
 ```
+Também adicionei uma coleção do postman ao repositório para facilitar os testes da api.
+
