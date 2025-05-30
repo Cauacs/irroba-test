@@ -72,8 +72,12 @@ class PacienteController extends Controller
      */
     public function destroy(Paciente $paciente)
     {
-        $paciente->delete();
+        
+        if ($paciente->agendamentos()->exists()) {
+            return response()->json(['error' => 'Não é possível excluir um paciente com agendamentos.'], 409);
+        }
 
+        $paciente->delete();
         return response()->json(['message' => 'Paciente deleted successfully'], 204);
     }
 }
