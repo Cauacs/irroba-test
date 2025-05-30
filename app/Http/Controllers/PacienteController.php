@@ -32,7 +32,8 @@ class PacienteController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:pacientes',
-            'telefone' => 'required',
+            'telefone' => 'required|regex:/^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/
+',
             'data_nascimento' => 'required|date',
             'cpf' => 'required|unique:pacientes',
             
@@ -58,7 +59,7 @@ class PacienteController extends Controller
     {
         $request->validate([
             'name' => 'required_without_all:telefone,email',
-            'telefone' => 'required_without_all:name,data_nascimento',
+            'telefone' => 'required_without_all:name,data_nascimento|regex:/^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/',
             'data_nascimento' => 'required_without_all:name,telefone|date',
         ]);
  
